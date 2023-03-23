@@ -1,0 +1,13 @@
+train: /home/aya/Kitti-ObjectDetection/kitty/train/images
+val: /home/aya/Kitti-ObjectDetection/kitty/valid/images
+test: /home/aya/Kitti-ObjectDetection/kitty/test/images
+
+nc: 9
+names: ['Cyclist', 'DontCare', 'Misc', 'Person_sitting', 'Tram', 'Truck', 'Van', 'car', 'person']
+
+roboflow:
+  workspace: kitty-nyzji
+  project: kitty-rktvs
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/kitty-nyzji/kitty-rktvs/dataset/1
