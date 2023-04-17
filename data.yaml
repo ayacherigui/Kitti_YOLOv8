@@ -1,6 +1,6 @@
-train: ./KITTI/train/images
-val: ./KITTI/valid/images
-test: ./KITTI/test/images
+train: train/images
+val: valid/images
+test: test/images
 
 nc: 15
 names: ['Cyclist', 'DontCare', 'Misc', 'Person_sitting', 'Tram', 'Truck', 'Van', 'car', 'Person','Tram', 'People', 'Bus', 'Vehicle-with-trailer', 'Special-vehicle', 'Pickup']
