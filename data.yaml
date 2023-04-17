@@ -1,13 +1,11 @@
-train: /home/aya/Kitti-ObjectDetection/kitty/train/images
-val: /home/aya/Kitti-ObjectDetection/kitty/valid/images
-test: /home/aya/Kitti-ObjectDetection/kitty/test/images
+train: ./KITTI/train/images
+val: ./KITTI/valid/images
+test: ./KITTI/test/images
 
-nc: 9
-names: ['Cyclist', 'DontCare', 'Misc', 'Person_sitting', 'Tram', 'Truck', 'Van', 'car', 'person']
+nc: 15
+names: ['Cyclist', 'DontCare', 'Misc', 'Person_sitting', 'Tram', 'Truck', 'Van', 'car', 'Person','Tram', 'People', 'Bus', 'Vehicle-with-trailer', 'Special-vehicle', 'Pickup']
 
-roboflow:
-  workspace: kitty-nyzji
-  project: kitty-rktvs
-  version: 1
-  license: CC BY 4.0
-  url: https://universe.roboflow.com/kitty-nyzji/kitty-rktvs/dataset/1
+# Whether to save the predictions of the validation set while training.
+SAVE_VALID_PREDICTION_IMAGES: True
+
+
