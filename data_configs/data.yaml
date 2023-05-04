@@ -1,0 +1,10 @@
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 9
+names: ['Cyclist', 'DontCare', 'Misc', 'Person_sitting', 'Tram', 'Truck', 'Van', 'car', 'person']
+# Whether to save the predictions of the validation set while training.
+SAVE_VALID_PREDICTION_IMAGES: True
+
+
