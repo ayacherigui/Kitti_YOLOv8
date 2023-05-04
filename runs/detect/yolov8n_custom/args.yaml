@@ -88,4 +88,4 @@ mixup: 0.0
 copy_paste: 0.0
 cfg: null
 v5loader: false
-save_dir: runs/detect/yolov8n_custom
+save_dir: runs/detect/yolov8n_custom12
