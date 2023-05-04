@@ -1,3 +1,11 @@
+"""
+USAGE
+
+# Split the data into train, valid, test sets:
+python split_data.py -dr <input_path> -d <output_path>
+
+"""
+
 import random
 import glob
 import os
@@ -30,7 +38,8 @@ def main(args):
     OUT_DIR = args['output_path']
 
     # Validation split ratio.
-    VALID_SPLIT = 0.17
+    VALID_SPLIT = 0.15
+    TEST_SPLIT = 0.15
 
     IMAGES_FOLDER = os.path.join(IN_DIR, 'images')
     LABELS_FOLDER = os.path.join(IN_DIR, 'annotations_yolo')
@@ -39,11 +48,15 @@ def main(args):
     TRAIN_LABELS_DEST = os.path.join(OUT_DIR, 'train', 'labels')
     VALID_IMAGES_DEST = os.path.join(OUT_DIR, 'valid', 'images')
     VALID_LABELS_DEST = os.path.join(OUT_DIR, 'valid', 'labels')
+    TEST_IMAGES_DEST = os.path.join(OUT_DIR, 'test', 'images')
+    TEST_LABELS_DEST = os.path.join(OUT_DIR, 'test', 'labels')
 
     os.makedirs(TRAIN_IMAGES_DEST, exist_ok=True)
     os.makedirs(TRAIN_LABELS_DEST, exist_ok=True)
     os.makedirs(VALID_IMAGES_DEST, exist_ok=True)
     os.makedirs(VALID_LABELS_DEST, exist_ok=True)
+    os.makedirs(TEST_IMAGES_DEST, exist_ok=True)
+    os.makedirs(TEST_LABELS_DEST, exist_ok=True)
 
     all_src_images = sorted(os.listdir(IMAGES_FOLDER))
     all_src_labels = sorted(os.listdir(LABELS_FOLDER))
@@ -57,19 +70,30 @@ def main(args):
     print(temp_images[:3])
     print(temp_labels[:3])
 
-    num_training_images = int(len(temp_images)*(1-VALID_SPLIT))
-    num_valid_images = int(len(temp_images)-num_training_images)
+    num_training_images = int(len(temp_images)*(1-(VALID_SPLIT+TEST_SPLIT)))
+    num_valid_images = int(len(temp_images)*(VALID_SPLIT))
+    num_test_images = int(len(temp_images)*(TEST_SPLIT))
 
-    print(num_training_images, num_valid_images)
+    print("Number of Training images", num_training_images)
+    print("Number of validation images", num_valid_images)
+    print("Number of test images", num_test_images)
 
     train_images = temp_images[:num_training_images]
     train_labels = temp_labels[:num_training_images]
 
-    valid_images = temp_images[num_training_images:len(all_src_images)]
-    valid_labels = temp_labels[num_training_images:len(all_src_images)]
+    valid_images = temp_images[num_training_images:
+                               num_training_images+num_valid_images]
+    valid_labels = temp_labels[num_training_images:
+                               num_training_images+num_valid_images]
+
+    test_images = temp_images[num_training_images +
+                              num_valid_images:len(all_src_images)]
+    test_labels = temp_labels[num_training_images +
+                              num_valid_images:len(all_src_images)]
 
     print(train_images[:3])
     print(valid_images[:3])
+    print(test_images[:3])
 
     for i in range(len(train_images)):
         shutil.copy(
@@ -89,6 +113,16 @@ def main(args):
         shutil.copy(
             os.path.join(LABELS_FOLDER, valid_labels[i]),
             os.path.join(VALID_LABELS_DEST, valid_labels[i])
+        )
+
+    for i in range(len(test_images)):
+        shutil.copy(
+            os.path.join(IMAGES_FOLDER, test_images[i]),
+            os.path.join(TEST_IMAGES_DEST, test_images[i])
+        )
+        shutil.copy(
+            os.path.join(LABELS_FOLDER, test_labels[i]),
+            os.path.join(TEST_LABELS_DEST, test_labels[i])
         )
 
     print("Success....")
