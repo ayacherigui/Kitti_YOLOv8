@@ -14,6 +14,7 @@ from ultralytics import YOLO
 import argparse
 from PIL import Image
 import numpy as np
+import cv2
 
 
 def parse_opt():
@@ -40,13 +41,13 @@ def main(args):
     images_path = args['images-path']
     path = args['result-dir']
 
-    NUM_CLASSES = 15
-    KITTI_INSTANCE_CATEGORY_NAMES = {0: u'Cyclist', 1: u'DontCare', 2: u'Misc', 3: u'Person_sitting', 4: u'Tram', 5: u'Truck', 6: 'Van', 7: u'car', 8: u'person', 9: u'Tram',
-                                     10: u'People', 11: u'Bus', 12: u'Vehicle-with-trailer', 13: u'Special-vehicle', 15: u'Pickup'}
+    NUM_CLASSES = 9
+    KITTI_INSTANCE_CATEGORY_NAMES = {0: u'Cyclist', 1: u'DontCare', 2: u'Misc', 3: u'Person_sitting', 4: u'Tram', 5: u'Truck', 6: 'Van', 7: u'car', 8: u'person'
+                                     }
 
-    DEVICE = torch.device('cpu')
+    DEVICE = torch.device('cuda')
 
-    model = YOLO("best.pt")
+    model = YOLO("../best.pt")
 
     print("pretrained model imported....")
     os.makedirs(path, exist_ok=True)  # make the destination dir
@@ -56,10 +57,12 @@ def main(args):
 
         img = Image.open(images_path+i)
         img = np.asarray(img)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert to RGB
         results = model.predict(img, verbose=False)
 
         # seperate the 3 keys (boxes, labels, scores)
-        bboxes, labels, scores = results[0].boxes.xyxy, results[0].boxes.cls, results[0].boxes.conf
+        # bboxes, labels, scores = results[0].boxes.xyxy, results[0].boxes.cls, results[0].boxes.conf #same results
+        bboxes, labels, scores = results[0].boxes.boxes, results[0].boxes.cls, results[0].boxes.conf
         OBJECT = ""
 
         for j in range(len(labels)):
